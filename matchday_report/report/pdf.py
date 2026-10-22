@@ -114,7 +114,7 @@ class Report:
         sec = getattr(canv, "_section", "")
         top = PAGE_H - 9 * mm
         canv.setFillColor(C(INK))
-        canv.setFont("title-Light", 13.5); canv.drawString(MARGIN, top - 11, "MATCHDAY REPORT")
+        canv.setFont("title-Light", 13.5); canv.drawString(MARGIN, top - 11, "MATCHDAY DATA REPORT")
         canv.setFont("title-Medium", 13.5); canv.drawString(MARGIN, top - 28, sec.upper())
         # right block: logo + league + season // GW
         canv.setFont("title-Light", 17)
