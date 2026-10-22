@@ -361,12 +361,12 @@ class Report:
         return [Section("Glossary"), grid([left, notes])]
 '''
     def glossary(self, extra_notes):
-        st = self.st
-        items = []
-        for t, d in GLOSSARY:
-            items += [Paragraph(t.upper(), st["gl_t"]), Paragraph(d, st["body"])]
-        half = len(items) // 2 + (len(items) // 2) % 2      # split evenly, keep each title with its text
-        return [Section("Glossary"), grid([items[:half], items[half:]])]
+      st = self.st
+      items = []
+      for t, d in GLOSSARY:
+        items += [Paragraph(t.upper(), st["gl_t"]), Paragraph(d, st["body"])]
+      half = len(items) // 2 + (len(items) // 2) % 2      # split evenly, keep each title with its text
+      return [Section("Glossary"), grid([items[:half], items[half:]])]
 
 # --------------------------------------------------------------------------- #
 class Section(Flowable):
