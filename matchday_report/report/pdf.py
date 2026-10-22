@@ -360,7 +360,6 @@ class Report:
                   Paragraph("Expected goals (xG), xA, xGChain and xGBuildup – to be added.", st["body"])]
         return [Section("Glossary"), grid([left, notes])]
 '''
-
     def glossary(self, extra_notes):
         st = self.st
         items = []
