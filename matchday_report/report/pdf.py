@@ -342,7 +342,7 @@ class Report:
         return [Section(title), grid([self.ranked_table(self.md.players, s, HALF_W, player=True, limit=10)
                                       for s in specs])]
 
-  '''
+'''
     def glossary(self, extra_notes):
         st, md = self.st, self.md
         left = []
