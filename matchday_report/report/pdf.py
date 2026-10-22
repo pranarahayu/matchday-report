@@ -342,24 +342,6 @@ class Report:
         return [Section(title), grid([self.ranked_table(self.md.players, s, HALF_W, player=True, limit=10)
                                       for s in specs])]
 
-'''
-    def glossary(self, extra_notes):
-        st, md = self.st, self.md
-        left = []
-        for t, d in GLOSSARY:
-            left += [Paragraph(t.upper(), st["gl_t"]), Paragraph(d, st["body"])]
-        notes = [Paragraph("DATA COVERAGE", st["gl_t"])]
-        for _, r in md.matches.iterrows():
-            mark = ('<font color="#1f9d55">complete</font>' if r.coverage >= 0.98
-                    else f'<font color="#e3262b">{r.coverage:.0%} of events</font>')
-            notes.append(Paragraph(f"{r.home} – {r.away}: {mark}", st["note"]))
-        notes.append(Spacer(1, 4))
-        for n in list(extra_notes) + md.notes:
-            notes.append(Paragraph("– " + n, st["note"]))
-        notes += [Paragraph("NOT INCLUDED (YET)", st["gl_t"]),
-                  Paragraph("Expected goals (xG), xA, xGChain and xGBuildup – to be added.", st["body"])]
-        return [Section("Glossary"), grid([left, notes])]
-'''
     def glossary(self, extra_notes):
       st = self.st
       items = []
