@@ -201,7 +201,7 @@ class Report:
     # ---------------------------------------------------------------- pages
     def cover(self):
         md, st = self.md, self.st
-        out = [Spacer(1, 22 * mm), Paragraph("M A T C H D A Y&nbsp;&nbsp;&nbsp;R E P O R T", st["cover_t"]),
+        out = [Spacer(1, 22 * mm), Paragraph("M A T C H D A Y&nbsp;&nbsp;&nbsp;D A T A&nbsp;&nbsp;&nbsp;R E P O R T", st["cover_t"]),
                Spacer(1, 14 * mm), _img_path(self.logo_path("competitions", self.th.name), 42 * mm),
                Spacer(1, 8 * mm), Paragraph(self.league, st["cover_s"]),
                Paragraph(self.season, st["cover_m"]) if self.season else Spacer(1, 1),
