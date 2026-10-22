@@ -154,7 +154,7 @@ GLOSSARY = [
     ("Progressive pass", "A pass that moves the ball towards goal by at least 30 m (both points in own half), "
      "15 m (crossing halfway) or 10 m (both in opponent half)."),
     ("Forward / lateral / back pass", "By pass angle: within 45° of straight towards goal = forward, within "
-     "45° of straight back = back, otherwise lateral. Long = provider's 'Long Ball' tag."),
+     "45° of straight back = back, otherwise lateral. Long = Lapangbola's 'Long Ball' tag."),
     ("Offensive duel", "Dribbles plus duels contested while in possession."),
     ("Defensive duel", "Tackles plus duels contested while the opponent had the ball."),
     ("Pass into penalty area", "A pass that starts outside and ends inside the opponent's penalty area."),
