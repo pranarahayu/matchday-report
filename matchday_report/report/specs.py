@@ -152,8 +152,7 @@ GLOSSARY = [
     ("Pass to final third", "A pass that starts outside and ends inside the final third (last 35 m)."),
     ("Deep completion", "A completed pass (crosses excluded) received within 20 m of the opponent goal."),
     ("Progressive pass", "A pass that moves the ball towards goal by at least 30 m (both points in own half), "
-     "15 m (crossing halfway) or 10 m (both in opponent half). Team tables: event geometry. Player "
-     "table: the data provider's completed progressive-pass tag."),
+     "15 m (crossing halfway) or 10 m (both in opponent half)."),
     ("Forward / lateral / back pass", "By pass angle: within 45° of straight towards goal = forward, within "
      "45° of straight back = back, otherwise lateral. Long = provider's 'Long Ball' tag."),
     ("Offensive duel", "Dribbles plus duels contested while in possession."),
