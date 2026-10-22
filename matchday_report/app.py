@@ -211,7 +211,7 @@ with st.sidebar:
                                                      tl_notes, md))
     if st.session_state.get("pdf") and st.session_state["pdf"][0] == pdf_key:
         fname = f"{league}_GW{gw:02d}_report.pdf".replace(" ", "_").replace("'", "")
-        st.download_button("⬇ Download PDF", st.session_state["pdf"][1], file_name=fname,
+        st.download_button("Download PDF", st.session_state["pdf"][1], file_name=fname,
                            mime="application/pdf", use_container_width=True)
 
 tabs = st.tabs(["Fixtures & table", "Matches", "Goals", "Teams", "Players", "Data & glossary"])
