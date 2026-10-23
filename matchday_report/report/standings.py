@@ -1,8 +1,14 @@
 """League tables with the regulation tie-breakers, groups and point deductions.
 
-Order inside a table: points (after deductions) -> among teams level on points:
-head-to-head points, head-to-head goal difference, head-to-head goals scored ->
-overall goal difference -> overall goals scored -> fair-play points (fewer is better).
+Order inside a table follows the regulation (4.b):
+  a. points (after deductions)
+  b.i  head-to-head among the clubs level on points: a) points, b) goal difference,
+       c) goals scored in matches between them. Only applies when those clubs have the
+       same points, the same matches played and the same number of meetings with each
+       other. Clubs still level are re-run through a)-c) on their own ("tie-breaker").
+       If that still leaves clubs level, all head-to-head results are discarded.
+  b.ii overall goal difference, iii. overall goals scored, iv. fair-play points (fewer
+       is better), v. drawing of lots (flagged in the notes; shown alphabetically).
 
 Fair-play points per player per match: yellow card 1, two yellows (second-yellow
 red) 3, straight red 3, yellow followed by a straight red 4.
@@ -153,19 +159,74 @@ def table(df_results: pd.DataFrame, teams, deductions: dict[str, int] | None = N
     df["GD"] = df["GF"] - df["GA"]
     df["Adj"] = df["Team"].map(deductions).fillna(0).astype(int)
     df["FP"] = df["Team"].map(fair_play).fillna(0).astype(int)
-    groups = []
+    groups, draws = [], []
     for pts in sorted(df["Pts"].unique(), reverse=True):
         group = df[df["Pts"] == pts].copy()
         if len(group) > 1:
-            tied = pd.merge(group, _h2h(group["Team"].tolist(), res), on="Team", how="left")
-            groups.append(tied.sort_values(["H2H_Pts", "H2H_GD", "H2H_GF", "GD", "GF", "FP"],
-                                           ascending=[False] * 5 + [True], kind="stable")[df.columns])
+            order, unresolved = _order_tied(group, res)
+            groups.append(group.set_index("Team").loc[order].reset_index())
+            draws += unresolved
         else:
             groups.append(group)
     out = pd.concat(groups).reset_index(drop=True)
     out = out[["Team", "P", "W", "D", "L", "GF", "GA", "GD", "Pts", "Adj", "FP"]]
     out.insert(0, "Pos", range(1, len(out) + 1))
+    out.attrs["draws"] = draws          # groups still level after every criterion (4.b.v: drawing of lots)
     return out
+
+
+# --------------------------------------------------------------------------- #
+# Regulation 4.b
+# --------------------------------------------------------------------------- #
+def _meetings(teams, res) -> dict:
+    """Number of matches between each pair of `teams`."""
+    m = {}
+    for i, a in enumerate(teams):
+        for b in teams[i + 1:]:
+            m[(a, b)] = int((((res.Home == a) & (res.Away == b)) | ((res.Home == b) & (res.Away == a))).sum())
+    return m
+
+
+def _h2h_applicable(group: pd.DataFrame, res) -> bool:
+    """4.b.i applies only if all clubs have the same points, matches played and number of
+    meetings with each other (and they have actually met)."""
+    if group["P"].nunique() != 1:
+        return False
+    meet = set(_meetings(group["Team"].tolist(), res).values())
+    return len(meet) == 1 and meet.pop() > 0
+
+
+def _h2h_order(group: pd.DataFrame, res):
+    """4.b.i a)-c), repeated for clubs still level (the 'tie-breaker').
+    Returns the ordered team list, or None if some clubs cannot be separated."""
+    if len(group) == 1:
+        return group["Team"].tolist()
+    if not _h2h_applicable(group, res):
+        return None
+    h = _h2h(group["Team"].tolist(), res).set_index("Team")[["H2H_Pts", "H2H_GD", "H2H_GF"]]
+    keys = sorted({tuple(v) for v in h.values}, reverse=True)
+    if len(keys) == 1:                                   # nobody separated
+        return None
+    order = []
+    for k in keys:
+        sub = group[group["Team"].isin(h.index[(h.values == k).all(axis=1)])]
+        sub_order = _h2h_order(sub, res) if len(sub) > 1 else sub["Team"].tolist()
+        if sub_order is None:
+            return None
+        order += sub_order
+    return order
+
+
+def _order_tied(group: pd.DataFrame, res):
+    """Order clubs level on points. Returns (ordered teams, [groups needing a draw])."""
+    order = _h2h_order(group, res)
+    if order is not None:
+        return order, []
+    # 4.b.i not applicable or not decisive: all head-to-head results are discarded and the
+    # whole group is ranked on ii. goal difference, iii. goals scored, iv. fair play (lower).
+    g = group.sort_values(["GD", "GF", "FP", "Team"], ascending=[False, False, True, True], kind="stable")
+    draws = [grp["Team"].tolist() for _, grp in g.groupby(["GD", "GF", "FP"]) if len(grp) > 1]
+    return g["Team"].tolist(), draws
 
 
 def league_tables(data: pd.DataFrame, rules: dict | None = None, gameweek: int | None = None
@@ -195,19 +256,29 @@ def league_tables(data: pd.DataFrame, rules: dict | None = None, gameweek: int |
     groups = rules.get("groups")
     if not groups:
         teams = data_teams + [to_data(t) for t in rules.get("teams", [])] + list(deductions)
-        return [(None, table(res, teams, deductions, fp))], notes
+        t = table(res, teams, deductions, fp)
+        notes += [_draw_note(d) for d in t.attrs.get("draws", [])]
+        return [(None, t)], notes
 
     out, placed = [], set()
     for gname, members in groups.items():
         teams = [to_data(t) for t in members]
         placed |= set(teams)
-        out.append((gname, table(res, teams, {t: p for t, p in deductions.items() if t in teams}, fp)))
+        t = table(res, teams, {k: p for k, p in deductions.items() if k in teams}, fp)
+        notes += [_draw_note(d, gname) for d in t.attrs.get("draws", [])]
+        out.append((gname, t))
     stray = [t for t in data_teams if t not in placed]
     if stray:
         notes.append("Teams in the data but not in any group (add them to COMPETITION_RULES in "
                      "report/standings.py): " + ", ".join(stray))
         out.append(("Unassigned", table(res, stray, fair_play=fp)))
     return out, notes
+
+
+def _draw_note(teams, group=None) -> str:
+    where = f" ({group})" if group else ""
+    return ("Level on every criterion" + where + ": " + ", ".join(teams) +
+            " – order to be decided by drawing of lots (regulation 4.b.v); shown alphabetically.")
 
 
 def standings(data: pd.DataFrame, deductions: dict[str, int] | None = None) -> pd.DataFrame:
