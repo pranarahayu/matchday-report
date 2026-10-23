@@ -115,7 +115,7 @@ class Report:
         sec = getattr(canv, "_section", "")
         top = PAGE_H - 9 * mm
         canv.setFillColor(C(INK))
-        canv.setFont("title-Light", 13.5); canv.drawString(MARGIN, top - 11, "MATCHDAY REPORT")
+        canv.setFont("title-Light", 13.5); canv.drawString(MARGIN, top - 11, "MATCHDAY DATA REPORT")
         canv.setFont("title-Medium", 13.5); canv.drawString(MARGIN, top - 28, sec.upper())
         # right block: logo + league + season // GW
         canv.setFont("title-Light", 17)
@@ -202,7 +202,7 @@ class Report:
     # ---------------------------------------------------------------- pages
     def cover(self):
         md, st = self.md, self.st
-        out = [Spacer(1, 22 * mm), Paragraph("M A T C H D A Y&nbsp;&nbsp;&nbsp;R E P O R T", st["cover_t"]),
+        out = [Spacer(1, 22 * mm), Paragraph("M A T C H D A Y&nbsp;&nbsp;&nbsp;D A T A&nbsp;&nbsp;&nbsp;R E P O R T", st["cover_t"]),
                Spacer(1, 14 * mm), _img_path(self.logo_path("competitions", self.th.name), 42 * mm),
                Spacer(1, 8 * mm), Paragraph(self.league, st["cover_s"]),
                Paragraph(self.season, st["cover_m"]) if self.season else Spacer(1, 1),
@@ -356,21 +356,12 @@ class Report:
                                       for s in specs])]
 
     def glossary(self, extra_notes):
-        st, md = self.st, self.md
-        left = []
+        st = self.st
+        items = []
         for t, d in GLOSSARY:
-            left += [Paragraph(t.upper(), st["gl_t"]), Paragraph(d, st["body"])]
-        notes = [Paragraph("DATA COVERAGE", st["gl_t"])]
-        for _, r in md.matches.iterrows():
-            mark = ('<font color="#1f9d55">complete</font>' if r.coverage >= 0.98
-                    else f'<font color="#e3262b">{r.coverage:.0%} of events</font>')
-            notes.append(Paragraph(f"{r.home} – {r.away}: {mark}", st["note"]))
-        notes.append(Spacer(1, 4))
-        for n in list(extra_notes) + md.notes:
-            notes.append(Paragraph("– " + n, st["note"]))
-        notes += [Paragraph("NOT INCLUDED (YET)", st["gl_t"]),
-                  Paragraph("Expected goals (xG), xA, xGChain and xGBuildup – to be added.", st["body"])]
-        return [Section("Glossary"), grid([left, notes])]
+            items += [Paragraph(t.upper(), st["gl_t"]), Paragraph(d, st["body"])]
+        half = len(items) // 2 + (len(items) // 2) % 2      # split evenly, keep each title with its text
+        return [Section("Glossary"), grid([items[:half], items[half:]])]
 
 
 # --------------------------------------------------------------------------- #
