@@ -1,0 +1,186 @@
+{
+  "features": [
+    "distance",
+    "angle",
+    "dist_goal_line",
+    "abs_y",
+    "in_box",
+    "Min",
+    "body_right_foot",
+    "body_left_foot",
+    "body_head",
+    "body_other",
+    "scheme_open_play",
+    "scheme_counter",
+    "scheme_corner",
+    "scheme_direct_fk",
+    "scheme_setpiece_fk",
+    "scheme_throw_in"
+  ],
+  "body_levels": [
+    "right_foot",
+    "left_foot",
+    "head",
+    "other"
+  ],
+  "scheme_levels": [
+    "open_play",
+    "counter",
+    "corner",
+    "direct_fk",
+    "setpiece_fk",
+    "throw_in"
+  ],
+  "body_map": {
+    "right foot": "right_foot",
+    "left foot": "left_foot",
+    "head": "head",
+    "header": "head",
+    "other bodies part": "other"
+  },
+  "scheme_map": {
+    "open play": "open_play",
+    "counter attack": "counter",
+    "corner kick": "corner",
+    "free kick": "direct_fk",
+    "set-piece free kick": "setpiece_fk",
+    "set-play freekick": "setpiece_fk",
+    "throw in": "throw_in"
+  },
+  "zone_map": {
+    "inside box": 1,
+    "inside": 1,
+    "outside box": 0
+  },
+  "penalty_xg": 0.7991,
+  "pitch_m": [
+    105.0,
+    68.0
+  ],
+  "coords": "X 0-100 toward attacked goal at X=100, Y 0-100 with centre at 50",
+  "params": {
+    "objective": "binary:logistic",
+    "eval_metric": "logloss",
+    "tree_method": "hist",
+    "eta": 0.03,
+    "max_depth": 4,
+    "min_child_weight": 5.0,
+    "subsample": 0.7,
+    "colsample_bytree": 1.0,
+    "gamma": 2.0,
+    "lambda": 3.0,
+    "monotone_constraints": "(-1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)",
+    "seed": 42
+  },
+  "num_boost_round": 280,
+  "trained_on": [
+    "2022-23",
+    "2023-24",
+    "2024-25",
+    "2025-26"
+  ],
+  "holdout_2025-26": {
+    "log_loss": 0.2635,
+    "brier": 0.0752,
+    "roc_auc": 0.7983,
+    "sum_xG": 689.1265,
+    "goals": 691.0
+  },
+  "xgot": {
+    "features": [
+      "distance",
+      "angle",
+      "dist_goal_line",
+      "abs_y",
+      "in_box",
+      "Min",
+      "body_right_foot",
+      "body_left_foot",
+      "body_head",
+      "body_other",
+      "scheme_open_play",
+      "scheme_counter",
+      "scheme_corner",
+      "scheme_direct_fk",
+      "scheme_setpiece_fk",
+      "scheme_throw_in",
+      "pl_height",
+      "pl_side",
+      "pl_corner",
+      "near_post"
+    ],
+    "placement_map": {
+      "bottom left corner": [
+        0,
+        -1
+      ],
+      "bottom middle": [
+        0,
+        0
+      ],
+      "bottom middle corner": [
+        0,
+        0
+      ],
+      "bottom right corner": [
+        0,
+        1
+      ],
+      "middle left side": [
+        1,
+        -1
+      ],
+      "middle left corner": [
+        1,
+        -1
+      ],
+      "central": [
+        1,
+        0
+      ],
+      "middle right side": [
+        1,
+        1
+      ],
+      "middle right corner": [
+        1,
+        1
+      ],
+      "top left corner": [
+        2,
+        -1
+      ],
+      "top middle": [
+        2,
+        0
+      ],
+      "top right corner": [
+        2,
+        1
+      ]
+    },
+    "penalty_xgot": 0.855,
+    "params": {
+      "objective": "binary:logistic",
+      "eval_metric": "logloss",
+      "tree_method": "hist",
+      "eta": 0.02,
+      "max_depth": 5,
+      "min_child_weight": 20.0,
+      "subsample": 0.7,
+      "colsample_bytree": 1.0,
+      "gamma": 0.5,
+      "lambda": 5.0,
+      "monotone_constraints": "(-1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)",
+      "seed": 42
+    },
+    "num_boost_round": 339,
+    "holdout_2025-26": {
+      "log_loss": 0.4427,
+      "brier": 0.1442,
+      "roc_auc": 0.8204,
+      "sum_xG": 748.9567,
+      "goals": 691.0
+    }
+  }
+}
