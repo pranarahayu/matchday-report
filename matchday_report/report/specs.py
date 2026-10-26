@@ -219,8 +219,7 @@ GLOSSARY_XT = [
 ]
 
 GLOSSARY = [
-    ("Field tilt", "Share of both teams' completed passes that start in the final third. Season tables "
-     "use totals, not an average of match shares."),
+    ("Field tilt", "Share of both teams' completed passes that start in the final third."),
     ("Defensive line height", "Average distance from own goal of the defensive actions (tackles, "
      "interceptions, clearances, blocks, recoveries, fouls) of the players listed as CB, LB, RB, LWB or RWB. "
      "Needs at least 5 such actions in the match. Higher = a higher line. Shown as the dashed line on the "
