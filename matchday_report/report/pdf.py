@@ -140,7 +140,8 @@ class Report:
         st = self.st
         d = ranked(df, spec, player=player, limit=limit)
         ncols = len(spec.cols)
-        val_w = 50 if ncols > 1 else 60
+        short = all(c.kind not in ("pair", "part") for c in spec.cols)
+        val_w = 60 if ncols == 1 else 42 if ncols >= 3 and short else 50   # leave room for names
         if spec.wide:
             val_w = min(68, (width - 150) / ncols)
         rank_w = 18
