@@ -24,7 +24,7 @@ from report.standings import awarded_results, guess_competition, rules_for
 from report.theme import THEMES, logo_file, season_and_label, theme_for
 from report.xt import available as xt_available
 
-st.set_page_config(page_title="Matchday Report", page_icon="⚽", layout="wide")
+st.set_page_config(page_title="Matchday Report", layout="wide")
 
 
 # --------------------------------------------------------------------------- #
