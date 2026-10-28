@@ -213,8 +213,8 @@ GLOSSARY_XG = [
 
 GLOSSARY_XT = [
     ("xT (expected threat)", "How much a completed pass or carry raises the chance of scoring: the value "
-     "of the zone where the ball ends minus the value of the zone where it started, from Karun Singh's "
-     "open 12 x 8 xT grid. Failed passes count 0. Team xT conceded = the opponent's xT."),
+     "of the zone where the ball ends minus the value of the zone where it started. "
+     "Failed passes count 0. Team xT conceded = the opponent's xT."),
     ("Threat share", "xT version of field tilt: a team's positive xT as a share of both teams' positive xT."),
 ]
 
